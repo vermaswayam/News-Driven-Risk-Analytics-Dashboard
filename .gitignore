@@ -1,0 +1,24 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+
+# Data files (don’t upload large or private datasets)
+data/
+*.csv
+*.db
+*.log
+
+# Environment variables (API keys)
+.env
+
+# OS + Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
