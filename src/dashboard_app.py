@@ -2,7 +2,6 @@ import streamlit as st
 from newsapi import NewsApiClient
 from transformers import pipeline
 import pandas as pd
-import time
 from dotenv import load_dotenv
 import os
 
@@ -19,7 +18,12 @@ newsapi = NewsApiClient(api_key=api_key)
 
 @st.cache_resource
 def load_sentiment_model():
-    return pipeline("sentiment-analysis")
+    return pipeline(
+    "sentiment-analysis",
+    model="yiyanghkust/finbert-tone",
+    tokenizer="yiyanghkust/finbert-tone"
+)
+
 
 sentiment_analyzer = load_sentiment_model()
 

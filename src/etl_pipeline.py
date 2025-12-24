@@ -1,7 +1,12 @@
+import os
+from dotenv import load_dotenv
+
 import requests
 import pandas as pd
 from datetime import datetime
 from pathlib import Path
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent  # project root
 DATA_DIR = BASE_DIR / "data"
@@ -9,7 +14,11 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)        # ensure folder exists
 
 OUTPUT_PATH = DATA_DIR / "news_data.csv"
 
-API_KEY = "c1ff6d7fa46d4417a8ea7a0ba54503e4" 
+
+API_KEY = os.getenv("NEWS_API_KEY")
+if not API_KEY:
+    raise RuntimeError("NEWS_API_KEY not set. Please add it to your .env file.")
+
 COMPANY = "Tesla" 
 
 
@@ -19,7 +28,8 @@ def fetch_news(query=COMPANY, page_size=20):
         f"https://newsapi.org/v2/everything?"
         f"q={query}&language=en&sortBy=publishedAt&pageSize={page_size}&apiKey={API_KEY}"
     )
-    response = requests.get(url)
+    response = requests.get(url, timeout=15)
+
     data = response.json()
 
     if data["status"] != "ok":
@@ -35,7 +45,7 @@ def fetch_news(query=COMPANY, page_size=20):
                 "url": a["url"],
                 "publishedAt": a["publishedAt"],
                 "content": a["content"],
-                "fetched_at": datetime.now(),
+                "fetched_at":  datetime.utcnow(),
             }
             for a in articles
         ]
