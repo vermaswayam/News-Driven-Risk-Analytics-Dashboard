@@ -7,7 +7,8 @@ import os
 
 
 load_dotenv()
-api_key = os.getenv("NEWS_API_KEY")
+api_key = st.secrets.get("NEWS_API_KEY") or os.getenv("NEWS_API_KEY")
+
 
 if not api_key:
     st.error("❌ NEWS_API_KEY not found. Please add it to your .env file.")
